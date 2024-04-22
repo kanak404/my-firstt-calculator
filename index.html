@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet">
+    <title>calculator</title>
+</head>
+
+<body>
+    <div class="fullsc">
+        <div class="container">
+            <div class="display">
+                <p id="mini-ans"></p>
+                <h1 id="answer">0</h1>
+            </div>
+            <div class="numbers">
+                <div class="rows">
+                    <div class="buttons" onclick="forClear()">C</div>
+                    <div class="buttons" id="d" onclick="forDelete()">D</div>
+                    <div class="buttons" id="modulus">M</div>
+                    <div class="buttons" id="divide" onclick="operations('/')">/</div>
+                </div>
+                <div class="rows">
+                    <div class="buttons" onclick="ready(7)">7</div>
+                    <div class="buttons" onclick="ready(8)">8</div>
+                    <div class="buttons" onclick="ready(9)">9</div>
+                    <div class="buttons" onclick="operations('*')">*</div>
+                </div>
+                <div class="rows">
+                    <div class="buttons" onclick="ready(4)">4</div>
+                    <div class="buttons" onclick="ready(5)">5</div>
+                    <div class="buttons" onclick="ready(6)">6</div>
+                    <div class="buttons" onclick="operations('-')">-</div>
+                </div>
+                <div class="rows">
+                    <div class="buttons" onclick="ready(1)">1</div>
+                    <div class="buttons" onclick="ready(2)">2</div>
+                    <div class="buttons" onclick="ready(3)">3</div>
+                    <div class="buttons" onclick="operations('+')">+</div>
+                </div>
+                <div class="rows" id="last-row">
+                    <div class="buttons" id="zero" onclick="forsingleZero()">0</div>
+                    <div class="buttons" id="zero" onclick="forDoubleZero()">00</div>
+                    <div class="buttons" id="dot" onclick="forDot()">.</div>
+                    <div class="buttons" id="equal" onclick="equalTo()">=</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let realAnswer = ""; //this is string to the text in display
+        let listOfAns = []
+        let answer = document.getElementById('answer');
+        let miniAns = document.getElementById('mini-ans');
+        let op = ['+', '-', '*', '/']
+        let operator;
+
+
+        function ready(value) {
+            if (listOfAns.includes('+')) {
+                realAnswer = forDisplay(value);
+                forOperation(realAnswer, '+');
+
+            } else if (listOfAns.includes('-')) {
+                realAnswer = forDisplay(value);
+                forOperation(realAnswer, '-')
+            }
+            else if (listOfAns.includes('*')) {
+                realAnswer = forDisplay(value);
+                forOperation(realAnswer, '*')
+            }
+            else if (listOfAns.includes('/')) {
+                realAnswer = forDisplay(value);
+                forOperation(realAnswer, '/')
+            }
+
+            else {
+                realAnswer = forDisplay(value);
+
+            }
+            return realAnswer
+        }
+
+        // for displaying the realAnswer
+        function forDisplay(value) {
+            realAnswer = realAnswer + value;
+            answer.textContent = realAnswer;
+            listOfAns.push(value);
+            return realAnswer;
+        }
+
+        //for clearing the string in display
+        function forClear() {
+            realAnswer = "";
+            answer.textContent = "0";
+            miniAns.textContent = "";
+            listOfAns = []
+            console.log(listOfAns)
+            return realAnswer, listOfAns;
+        }
+
+        //for deleting the string one by one
+        function forDelete() {
+            let len = realAnswer.length;
+            realAnswer = realAnswer.slice(0, len - 1);
+            if (realAnswer == "") {
+                answer.textContent = "0";
+                listOfAns.pop();
+            } else {
+                answer.textContent = realAnswer;
+                if (listOfAns.includes('+')) {
+                    forOperation(realAnswer, '+');
+                }
+                else if (listOfAns.includes('-')) {
+                    forOperation(realAnswer, '-')
+                }
+                else if (listOfAns.includes('*')) {
+                    forOperation(realAnswer, '*')
+                }
+                else if (listOfAns.includes('/')) {
+                    forOperation(realAnswer, '/')
+                }
+                else {
+                    console.log("here")
+                    miniAns.textContent = "";
+                }
+                listOfAns.pop();
+            }
+            console.log(listOfAns);
+            console.log(realAnswer);
+            return realAnswer;
+        }
+
+        function forDoubleZero() {
+            if (realAnswer == "") {
+                realAnswer;
+            } else {
+                ready('00')
+            }
+            return realAnswer
+        }
+
+
+        function forsingleZero() {
+            if (realAnswer == "") {
+                realAnswer;
+            } else {
+                ready('0')
+            }
+            return realAnswer
+        }
+
+
+        function forDot() {
+            if (forCheking()==true) {
+                let l = realAnswer.split(operator);
+                if (l[1].includes('.')){  
+                    realAnswer;                  
+                }else{
+                    answer.textContent = realAnswer + ".";
+                    realAnswer = realAnswer + ".";
+                    listOfAns.push('.');
+                }
+                    
+            }else if(realAnswer.includes('.')){
+                realAnswer
+            }else {
+                if (realAnswer == "") {
+                    answer.textContent = realAnswer + "0.";
+                    realAnswer = realAnswer + "0.";
+                    listOfAns.push('.')
+                }
+                else {
+                    answer.textContent = realAnswer + ".";
+                    realAnswer = realAnswer + ".";
+                    listOfAns.push('.');
+                }
+            }
+            return realAnswer
+        }
+        function operations(value) {
+            if (listOfAns.includes('+')) {
+                realAnswer;
+            } else if (listOfAns.includes('-')) {
+                realAnswer;
+            } else if (listOfAns.includes('/')) {
+                realAnswer;
+            } else if (listOfAns.includes('*')) {
+                realAnswer;
+            } else if (realAnswer == "") {
+                realAnswer;
+            }
+            else {
+                answer.textContent = realAnswer + value;
+                realAnswer = realAnswer + value;
+                listOfAns.push(value);
+            }
+            return realAnswer
+        }
+        function equalTo() {
+            if (forCheking() == false) {
+                realAnswer;
+            } else {
+                let result = miniAns.textContent;
+                miniAns.textContent = "";
+                realAnswer = result;
+                listOfAns = [];
+                listOfAns.push(result)
+                answer.textContent = realAnswer;
+            }
+            return realAnswer;
+        }
+
+        function forOperation(value, op) {
+            let res = 0;
+            if (op == '+') {
+                let listOfNumbers = value.split('+');
+                let num1 = listOfNumbers[0];
+                let num2 = listOfNumbers[1];
+                res = Number(num1) + Number(num2);
+                miniAns.textContent = res;
+            } else if (op == '-') {
+                let listOfNumbers = value.split('-');
+                let num1 = listOfNumbers[0];
+                let num2 = listOfNumbers[1];
+                res = Number(num1) - Number(num2);
+                miniAns.textContent = res;
+            } else if (op == '*') {
+                let listOfNumbers = value.split('*');
+                let num1 = listOfNumbers[0];
+                let num2 = listOfNumbers[1];
+                res = Number(num1) * Number(num2);
+                miniAns.textContent = res;
+            }
+            else if (op == '/') {
+                let listOfNumbers = value.split('/');
+                let num1 = listOfNumbers[0];
+                let num2 = listOfNumbers[1];
+                res = Number(num1) / Number(num2);
+                miniAns.textContent = res;
+            } else {
+                realAnswer;
+            }
+            return res;
+        }
+        function forCheking() {
+            let f = false;
+            let opLen = op.length - 1;
+            let lstLen = listOfAns.length - 1;
+            for (let i = 0; i <= opLen; i++) {
+                if(f==false){
+                    for (let j = 0; j <= lstLen; j++) {
+                    if (op[i] == listOfAns[j]) {
+                        f = true;
+                        operator = op[i]
+                        console.log(operator)
+                        break;        
+                    }
+                    else {
+                        f = false;
+                    }
+                }
+                }else{
+                    break;
+                }            
+            }
+            return f;
+        }
+
+    </script>
+
+
+
+</body>
+
+</html>
